@@ -1,0 +1,537 @@
+<!--
+    Winhweel.js pins and sound example by Douglas McKechie @ www.dougtesting.net
+    See website for tutorials and other documentation.
+
+    The MIT License (MIT)
+
+    Copyright (c) 2018 Douglas McKechie
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+    ============================================================================
+    Note:
+        Tick Sound was recorded by DeepFrozenApps and was downloaded from http://soundbible.com/2044-Tick.html
+        It has an attribution 3.0 licence.
+-->
+<html>
+    <head>
+        <title>HTML5 Canvas Winning Wheel</title>
+		  
+			<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
+			
+			  <link rel="stylesheet" href="onsen/css/onsenui.css">
+			  <link rel="stylesheet" href="onsen/css/onsen-css-components.min.css">
+			  <script src="onsen/js/onsenui.min.js"></script>
+			  <script src="onsen/js/jquery.min.js"></script>
+			<link rel="stylesheet" href="css/main.css" type="text/css" />
+			<link rel="stylesheet" href="css/index.css" type="text/css" />
+        <script type="text/javascript" src="js/Winwheel.js"></script>
+        <script type="text/javascript" src="js/spin_function.js"></script>
+            <script src="https://js.paystack.co/v1/inline.js"></script>
+			<script src="ps.js"></script>
+        <script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+        <script src="js/TweenMax.min.js"></script>
+        <script src="js/index2.js"></script>
+        <script src="js/index.js"></script>
+    </head>
+    <body style="overflow:hidden;">
+	<ons-navigator id="my_navigator" animation="slide" page="login_page.html"></ons-navigator>
+	<!--Login Page  -->
+	<template id="login_page.html">
+	
+	<ons-page id="login_page">
+			 <div id="div_background">
+					<div id="rounded_div"> 
+						<input class="rounded_input" type="text" id="login_username"/>
+					</div>
+					<div id="rounded_div_2"> 
+						<input class="rounded_input" type="password" id="login_password"/>
+					</div>
+					<div id="3d_button"> 
+						<button class="button_div" id="login_button">LOGIN</button>
+					</div>
+					<div ><center><img id="facebook_login"  src="layout/facebook_login.png"></center></div>
+					<div ><center><img id="or" src="layout/or.png"></center></div>
+								
+					<div><center><img id="sign_up_image" src="layout/signup.png"></center></div>
+				
+			 </div>
+		</ons-page>
+	</template>
+		
+		
+		<!-- Registration Page -->
+		<template id="registration_page.html">
+			<ons-page id="registration_page">
+				  <div id="div_background">
+						<div align="center" id="register_rounded_div"> 
+							<input align="center" class="rounded_input" type="text" placeholder="Username" id="username"/>
+							
+						</div>
+						<div align="center" id="rounded_div_2"> 
+							<input align="center" class="rounded_input" type="text" placeholder="Phone No" id="phonenumber" />
+							
+						</div>
+						<div align="center" id="rounded_div_2"> 
+							<input align="center" class="rounded_input" type="password" placeholder="Password" id="password"/>
+							
+						</div>
+						<div align="center" id="rounded_div_2"> 
+							<input align="center" class="rounded_input" type="password" placeholder="Confirm Password" id="confirm_password" />
+						</div>
+						<div align="center" class="register_radio"> 
+							<input  type="radio" value="Male" name="gender" style="margin-left:10%" checked/>Male
+							<input  type="radio" value="Female" name="gender" style="margin-left:30%"/>Female
+							
+						</div>
+						<div align="center" id="3d_button"> 
+							<button id="register_user" class="button_div">Sign Up</button>
+						</div>
+						<div ><center><img id="or" src="layout/or.png"></center></div>
+									
+						<div><center><img id="login_image" src="layout/login.png"></center></div>
+				
+				</div>
+
+			</ons-page> 
+		</template>
+		
+		<!-- Menu Page -->
+		<template id="main_menu_page.html">
+			<ons-page id="main_menu_page">
+			
+				 <div id="div_background">
+				<!-- <div align="center" id="popup" class="ontop">
+							<div style="top:50%; left:50%; margin-top:200px;margin-left:30px;">
+								<center><img  src="layout/msg.png" alt="Spin"  /></center>
+							</div>
+				</div>-->
+				
+				<div id="spin_area" >
+					<div style="position:absolute; top:0px; left:15px; z-index:1;">
+						<div style="float:left;">
+							<img class="button_spin" id="spin_button" src="layout/spin_button.png" alt="Spin" onClick="startSpin();" />
+						</div>
+						<div style="float:right; margin-left:145px;">
+							<img class="button_spin" id="share_button" src="layout/share.png" alt="Spin" />
+						</div>
+						<div align="center"  style="margin-left:-10px;">
+							<img class="button_spin_remain" id="spin_button" src="layout/left.png" alt="Spin"  />
+						</div>
+						<div align="center" id="spins_remaining" style="margin-left:125px;color:#19a0f5; font-style:bold; margin-top:-50px;position:absolute; z-index:3;">
+							NO SPINS LEFT
+						</div>
+						
+						
+						
+						
+					</div>
+						
+					
+					<div align="center" style="position:absolute; top:0px; z-index:0;">
+							
+						
+										<div  class="the_wheel" align="center" valign="center">
+										
+											<canvas id="canvas" width="300" height="350">
+												<p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+											</canvas>
+										</div>
+								<div style="color:white; font-size:20px;  font-style:bold; margin-top:20px;"align="center">
+									Buy more spins
+								</div>
+								
+								<div>
+									<div style="float:left;margin-left:15px">
+										<img class="dollar_button" id="one_dollar" src="layout/1dollar.png" alt="Spin"  />
+									</div>
+									<div style="float:right; margin-left:5px;">
+										<img class="dollar_button" id="2_dollar" src="layout/2dollar.png" alt="Spin"  />
+									</div>
+								</div>
+								
+					</div>
+					
+				
+				</div>
+				
+			</div>
+				
+			</ons-page> 
+		</template>
+	
+	<!--Login Page  -->
+	<template id="menu.html">
+	
+	<ons-page id="menu">
+			 <div id="div_background">
+					<div align="center"><img id="dice" class="menu_pic" src="layout/dice.png" /></div>
+					<div align="center"><img id="pricewheel" class="menu_pic" src="layout/pricewheel.png" /></div>
+					<div align="center"><img id="giveaway" class="menu_pic" src="layout/giveaway.png" /></div>
+					<div align="center"><img id="winnersboard" class="menu_button" src="layout/winnersboard.png" /></div>
+					<div align="center"><img id="settings" class="menu_button" src="layout/settings.png" /></div>
+				
+			 </div>
+		</ons-page>
+	</template>
+		
+        <script>
+		var user_id;
+		var username;
+		var login_status = false;
+		var amountpay = 10000;
+		//var uni;
+		document.addEventListener('init', function(event) {
+			console.log('This is a lifecycle event!', event.target);
+			//localStorage.setItem("user_id", 0);
+			username = localStorage.getItem("username");
+			 user_id = localStorage.getItem("user_id");
+			 login_status = localStorage.getItem("login_status");
+			 
+		if(user_id >0){
+			var daily_spin_allocation = dailySpinAllocator(user_id);
+				 $.ajax({
+						type:"POST",  //Request type
+						url: "http://192.168.43.194/spinthewheel/php_scripts/spincalculator.php",   
+						data:{user_id:user_id},
+						cache:false,
+						success:function(data) {
+						  if(data > 0){
+							
+							document.getElementById('spins_remaining').innerHTML = '<span style="margin-left:25px;color:#19a0f5; font-style:bold;">'+ data +' Left</span>';
+	
+						  }
+						   
+						}
+					});
+					
+			document.querySelector('#my_navigator').pushPage('menu.html');
+		}
+  var page = event.target;
+  if (page.matches('#login_page')) {
+			//page.querySelector('ons-toolbar .center').innerHTML = 'LOGIN';
+			//set onlick listener for login button
+			page.querySelector('#login_button').onclick = function() {
+						var login_username = document.getElementById("login_username").value;
+						var login_password = document.getElementById("login_password").value;
+						if($.trim(login_username).length>0 && $.trim(login_password).length>0)
+							{
+								user_login_status = login_user(login_username, login_password);
+							}
+			};
+			//set onlick listener for regiter button, this buttonwill navigate to the registration page
+			 page.querySelector('#sign_up_image').onclick = function() {
+				  document.querySelector('#my_navigator').pushPage('registration_page.html');
+			};
+	  }
+	  else if(page.matches('#registration_page')){
+		//set onlick listener for regiter button
+			 page.querySelector('#register_user').onclick = function() {
+						var username = document.getElementById("username").value;
+						var phonenumber = document.getElementById("phonenumber").value;
+						var password = document.getElementById("password").value;
+						var confirm_password = document.getElementById("confirm_password").value;
+						var radioValue = $("input[name='gender']:checked").val();
+						var user_reg_status;
+						var status = 0;
+						if(username == ""){
+							ons.notification.alert('USername cannot be empty');
+						}else if(phonenumber ==""){
+							ons.notification.alert('Phone number cannot be empty');
+						}else if(password == ""){
+							ons.notification.alert('Password cannot be empty');
+						}else if(confirm_password == ""){
+							ons.notification.alert('Confirm password cannot be empty');
+						}
+						if(password != confirm_password){
+							ons.notification.alert('Password didnt match');
+							status = 1;
+						}
+						if(status == 0){
+							user_reg_status = register_user(username, phonenumber, password,radioValue);
+						}
+						
+					
+				  //document.querySelector('#my_navigator').pushPage('main_menu_page.html');
+			};
+			//set onlick listener for regiter button
+			 page.querySelector('#login_image').onclick = function() {
+					
+				  document.querySelector('#my_navigator').pushPage('login_page.html');
+			
+			};
+	  }
+	    else if(page.matches('#main_menu_page')){
+		
+				var theWheel = new Winwheel({
+                'numSegments'  : 15,     // Specify number of segments.
+                'outerRadius'  : 140,   // Set outer radius so wheel fits inside the background.
+                'textFontSize' : 28,    // Set font size as desired.
+                'segments'     :        // Define segments including colour and text.
+                [
+                   {'fillStyle' : '#eae56f', 'text' : '1'},
+                   {'fillStyle' : '#89f26e', 'text' : '2'},
+                   {'fillStyle' : '#7de6ef', 'text' : '3'},
+                   {'fillStyle' : '#e7706f', 'text' : '4'},
+                   {'fillStyle' : '#eae56f', 'text' : '5'},
+                   {'fillStyle' : '#89f26e', 'text' : '6'},
+                   {'fillStyle' : '#7de6ef', 'text' : '7'},
+                   {'fillStyle' : '#e7706f', 'text' : '8'},
+                   {'fillStyle' : '#eae56f', 'text' : '9'},
+                   {'fillStyle' : '#89f26e', 'text' : '10'},
+                   {'fillStyle' : '#7de6ef', 'text' : '11'},
+                   {'fillStyle' : '#eae56f', 'text' : '12'},
+                   {'fillStyle' : '#e7706f', 'text' : '13'},
+                   {'fillStyle' : '#7de6ef', 'text' : '14'},
+                   {'fillStyle' : '#89f26e', 'text' : '15'}
+                ],
+                'animation' :           // Specify the animation to use.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 15,
+                    'spins'    : 8,
+                    'callbackFinished' : alertPrize,
+                    'callbackSound'    : playSound,   // Function to call when the tick sound is to be triggered.
+                    'soundTrigger'     : 'segment'        // Specify pins are to trigger the sound, the other option is 'segment'.
+                },
+                'pins' :
+                {
+                    'number' : 15   // Number of pins. They space evenly around the wheel.
+                }
+            });
+			//set variables
+			//var  width = window.screen.width * 0.5;
+			//var  height = window.screen.height * 0.3;
+			//var  width_wheel  = window.screen.width * 0.3;
+			//var  height_wheel  = window.screen.height * 0.8;
+		
+			
+		// -----------------------------------------------------------------
+            // This function is called when the segment under the prize pointer changes
+            // we can play a small tick sound here like you would expect on real prizewheels.
+            // -----------------------------------------------------------------
+            var audio = new Audio('tick.mp3');  // Create audio object and load tick.mp3 file.
+
+            function playSound()
+            {
+                // Stop and rewind the sound if it already happens to be playing.
+                audio.pause();
+                audio.currentTime = 0;
+
+                // Play the sound.
+                audio.play();
+            }
+
+            // -------------------------------------------------------
+            // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
+            // note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
+            // -------------------------------------------------------
+            function alertPrize(indicatedSegment)
+            {
+                // Do basic alert of the segment text.
+                // You would probably want to do something more interesting with this information.
+				//alert("You have won " + indicatedSegment.text);
+				reduceSpinBalance(user_id);
+				updateRewards(user_id,indicatedSegment.text);
+				//document.getElementById('popup').style.display = 'block';
+				ons.notification.alert("You have won " + indicatedSegment.text);
+				resetWheel();					
+						$('#spin_button').show();
+				
+            }
+
+            // =======================================================================================================================
+            // Code below for the power controls etc which is entirely optional. You can spin the wheel simply by
+            // calling theWheel.startAnimation();
+            // =======================================================================================================================
+            var wheelPower    = 3;
+            var wheelSpinning = false;
+
+            // -------------------------------------------------------
+            // Function to handle the onClick on the power buttons.
+            // -------------------------------------------------------
+            function powerSelected(powerLevel)
+            {
+                // Ensure that power can't be changed while wheel is spinning.
+                if (wheelSpinning == false)
+                {
+                    // Reset all to grey incase this is not the first time the user has selected the power.
+                    document.getElementById('pw1').className = "";
+                    document.getElementById('pw2').className = "";
+                    document.getElementById('pw3').className = "";
+
+                    // Now light up all cells below-and-including the one selected by changing the class.
+                    if (powerLevel >= 1)
+                    {
+                        document.getElementById('pw1').className = "pw1";
+                    }
+
+                    if (powerLevel >= 2)
+                    {
+                        document.getElementById('pw2').className = "pw2";
+                    }
+
+                    if (powerLevel >= 3)
+                    {
+                        document.getElementById('pw3').className = "pw3";
+                    }
+
+                    // Set wheelPower var used when spin button is clicked.
+                    wheelPower = 3;
+
+                    // Light up the spin button by changing it's source image and adding a clickable class to it.
+                    document.getElementById('spin_button').src = "layout/spin_button.png";
+                    document.getElementById('spin_button').className = "clickable";
+                }
+            }
+
+            function startSpin()
+            {	
+				
+			
+			  // Ensure that spinning can't be clicked again while already running.
+                if (wheelSpinning == false)
+                {
+                
+					theWheel.animation.spins = 15;
+                    // Disable the spin button so can't click again while wheel is spinning.
+					//$('#spin_button').hide();
+                    //document.getElementById('spin_button').src  = "layout/spin_button.png";
+                    document.getElementById('spin_button').className = "button_spin clickable";
+					
+                    // Begin the spin animation by calling startAnimation on the wheel object.
+                    theWheel.startAnimation();
+
+                    // Set to true so that power can't be changed and spin button re-enabled during
+                    // the current animation. The user will have to reset before spinning again.
+                    wheelSpinning = true;
+                }
+				 
+            }
+
+            // -------------------------------------------------------
+            // Function for reset button.
+            // -------------------------------------------------------
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                theWheel.draw();                // Call draw to render changes to the wheel.
+
+               // document.getElementById('pw1').className = "";  // Remove all colours from the power level indicators.
+               // document.getElementById('pw2').className = "";
+               // document.getElementById('pw3').className = "";
+
+                wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+            }
+		  // -------------------------------------------------------
+		  
+
+
+            // Click handler for spin button.
+            // -------------------------------------------------------
+			//set onlick listener for regiter button, this buttonwill navigate to the registration page
+			 page.querySelector('#spin_button').onclick = function() {
+			 
+			 $.ajax({
+						type:"POST",  //Request type
+						url: "http://192.168.43.194/spinthewheel/php_scripts/spincalculator.php",   
+						data:{user_id:user_id},
+						cache:false,
+						success:function(data) {
+						  if(data > 0){
+							var sp = data - 1;
+							document.getElementById('spins_remaining').innerHTML = '<span style="margin-left:25px;color:#19a0f5; font-style:bold;">'+ sp +' Left</span>';
+							startSpin();
+						  }else{
+							ons.notification.alert('You have '+data+" left");
+						  }
+						   
+						}
+					});
+				
+				 
+				
+			};
+			
+			//set onclick listener for share button
+			page.querySelector('#share_button').onclick = function(){
+				window.plugins.socialsharing.share('Play and win amazaing rewards, powered by Donkey Technologies', null, null, 'http://www.facebook.com');
+			
+			};
+			//set onclick listener for share button
+			page.querySelector('#one_dollar').onclick = function(){
+			
+				//payment fuction
+				// Now safe to use device APIs
+				window.PaystackPlugin.chargeCard(
+				  function(resp) {
+					// charge successful, grab transaction reference - do your thang!
+					console.log('charge successful: ', resp);
+					alert(resp);
+				  },
+				  function(resp) {
+					// Something went wrong, oops - perhaps an invalid card.
+					console.log('charge failed: ', resp);
+					alert(resp);
+				  },
+				  {
+					cardNumber: '4123450131001381', 
+					expiryMonth: '10', 
+					expiryYear: '17', 
+					cvc: '883',
+					email: 'chargeIOS@master.dev',
+					amountInKobo: 150000,
+				});
+			
+			};
+			//end of menu page
+			
+	  }else if (page.matches('#menu')) {
+		page.querySelector('#pricewheel').onclick = function() {
+				document.querySelector('#my_navigator').pushPage('main_menu_page.html');
+		};
+			page.querySelector('#winnersboard').onclick = function() {
+				 ons.notification.alert('winners board');
+			};
+			page.querySelector('#settings').onclick = function() {
+				 ons.notification.alert('settings');
+			};
+	  
+	  }
+	 
+	  
+	
+	});
+		
+		
+		function spinthewhel()
+		{
+			ons.notification.alert('Login to your account');
+		}
+			
+	   
+            
+
+           
+        </script>
+		    <script type="text/javascript" src="cordova.js"></script>
+    </body>
+</html>
